@@ -7,11 +7,12 @@ namespace Movie_Characters_API.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(200)]
         public string Name { get; set; }
 
         [Required]
         [MaxLength(2000)]
         public string Description { get; set; }
+        public ICollection<Movie> Movies { get; set; }
     }
 }

@@ -22,5 +22,9 @@ namespace Movie_Characters_API.Models
         public string PictureUrl { get; set; }
         [Required]
         public string TrailerUrl { get; set; }
+        public ICollection<Character> Characters { get; set;}
+        public Franchise Franchise { get; set; }
+        public int FranchiseId { get; set; }
+
     }
 }

@@ -17,5 +17,6 @@ namespace Movie_Characters_API.Models
         public string Gender{ get; set; }
         [Required]
         public string PictureUrl { get; set;}
+        public ICollection<Movie> Movies { get; set;}
     }
 }
