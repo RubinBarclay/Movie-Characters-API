@@ -7,13 +7,13 @@
 namespace Movie_Characters_API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDbContext : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "characters",
+                name: "Characters",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -25,11 +25,11 @@ namespace Movie_Characters_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_characters", x => x.Id);
+                    table.PrimaryKey("PK_Characters", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "franchises",
+                name: "Franchises",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -39,11 +39,11 @@ namespace Movie_Characters_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_franchises", x => x.Id);
+                    table.PrimaryKey("PK_Franchises", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "movies",
+                name: "Movies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -54,45 +54,42 @@ namespace Movie_Characters_API.Migrations
                     Director = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TrailerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FranchiseId = table.Column<int>(type: "int", nullable: false)
+                    FranchiseId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_movies", x => x.Id);
+                    table.PrimaryKey("PK_Movies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_movies_franchises_FranchiseId",
+                        name: "FK_Movies_Franchises_FranchiseId",
                         column: x => x.FranchiseId,
-                        principalTable: "franchises",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Franchises",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "CharacterMovie",
                 columns: table => new
                 {
-                    CharactersId = table.Column<int>(type: "int", nullable: false),
-                    MoviesId = table.Column<int>(type: "int", nullable: false)
+                    MovieId = table.Column<int>(type: "int", nullable: false),
+                    CharacterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CharacterMovie", x => new { x.CharactersId, x.MoviesId });
+                    table.PrimaryKey("PK_CharacterMovie", x => new { x.MovieId, x.CharacterId });
                     table.ForeignKey(
-                        name: "FK_CharacterMovie_characters_CharactersId",
-                        column: x => x.CharactersId,
-                        principalTable: "characters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_CharacterMovie_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalTable: "Characters",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_CharacterMovie_movies_MoviesId",
-                        column: x => x.MoviesId,
-                        principalTable: "movies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_CharacterMovie_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
-                table: "characters",
+                table: "Characters",
                 columns: new[] { "Id", "Alias", "Gender", "Name", "PictureUrl" },
                 values: new object[,]
                 {
@@ -102,7 +99,7 @@ namespace Movie_Characters_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "franchises",
+                table: "Franchises",
                 columns: new[] { "Id", "Description", "Name" },
                 values: new object[,]
                 {
@@ -111,23 +108,33 @@ namespace Movie_Characters_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "movies",
+                table: "Movies",
                 columns: new[] { "Id", "Director", "FranchiseId", "Genre", "PictureUrl", "Title", "TrailerUrl", "Year" },
                 values: new object[,]
                 {
-                    { 1, "James Gunn", 1, "Action, Fantasia", "https://m.media-amazon.com/images/M/MV5BMDgxOTdjMzYtZGQxMS00ZTAzLWI4Y2UtMTQzN2VlYjYyZWRiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg", "Guardians of the Galaxy Vol 3 ", "https://youtu.be/u3V5KDHRQvk", 2023 },
+                    { 1, "James Gunn", 1, "Action, Fantasia", "https://m.media-amazon.com/images/M/MV5BMDgxOTdjMzYtZGQxMS00ZTAzLWI4Y2UtMTQzN2VlYjYyZWRiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg", "Avengers ", "https://youtu.be/u3V5KDHRQvk", 2023 },
                     { 2, "Ryan Coogler", 1, "Action , Fantasia", "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/E9C4697F1745DEF68CD73B638BE6FCFB72B537788FB4F252E04B7BB745EE27A9/scale?width=1200&aspectRatio=1.78&format=jpeg", "Black Panther", "https://youtu.be/xjDjIWPwcPU", 2022 },
                     { 3, "Peter Jackson", 2, "Drama", "https://static.tvtropes.org/pmwiki/pub/images/868ad3d2_3a50_4a2a_8218_4fa10d1352b0.jpeg", "The Hobbit: An Unexpected Journey", "https://youtu.be/SDnYMbYB-nU", 2012 }
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_CharacterMovie_MoviesId",
+            migrationBuilder.InsertData(
                 table: "CharacterMovie",
-                column: "MoviesId");
+                columns: new[] { "CharacterId", "MovieId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 1 },
+                    { 3, 3 }
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_movies_FranchiseId",
-                table: "movies",
+                name: "IX_CharacterMovie_CharacterId",
+                table: "CharacterMovie",
+                column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_FranchiseId",
+                table: "Movies",
                 column: "FranchiseId");
         }
 
@@ -138,13 +145,13 @@ namespace Movie_Characters_API.Migrations
                 name: "CharacterMovie");
 
             migrationBuilder.DropTable(
-                name: "characters");
+                name: "Characters");
 
             migrationBuilder.DropTable(
-                name: "movies");
+                name: "Movies");
 
             migrationBuilder.DropTable(
-                name: "franchises");
+                name: "Franchises");
         }
     }
 }
