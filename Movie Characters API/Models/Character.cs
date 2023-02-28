@@ -18,6 +18,6 @@ namespace Movie_Characters_API.Models
         [Required]
         [Url]
         public string PictureUrl { get; set;}
-        public ICollection<Movie> Movies { get; set;}
+        public ICollection<Movie>? Movies { get; set;}
     }
 }
