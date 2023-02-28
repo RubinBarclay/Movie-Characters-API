@@ -19,8 +19,10 @@ namespace Movie_Characters_API.Models
         [MaxLength(100)]
         public string Director { get; set; }
         [Required]
+        [Url]
         public string PictureUrl { get; set; }
         [Required]
+        [Url]
         public string TrailerUrl { get; set; }
         public ICollection<Character> Characters { get; set;}
         public Franchise Franchise { get; set; }

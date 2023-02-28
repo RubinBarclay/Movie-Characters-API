@@ -6,9 +6,9 @@ namespace Movie_Characters_API.Models
 {
     public class MovieDbContext : DbContext
     {
-        public DbSet<Movie> Movies { get; set; } = null!;
-      public DbSet<Franchise> Franchises { get; set; } = null!;
-      public DbSet<Character> Characters { get; set; } = null!;
+        public DbSet<Movie> Movies { get; set; } 
+      public DbSet<Franchise> Franchises { get; set; } 
+      public DbSet<Character> Characters { get; set; } 
 
         public MovieDbContext(DbContextOptions<MovieDbContext> options)
             : base(options)
