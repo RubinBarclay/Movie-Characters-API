@@ -1,6 +1,7 @@
 ﻿using Movie_Characters_API.Models;
 using Movie_Characters_API.Services.FranchiseDataAccess;
 using Microsoft.EntityFrameworkCore;
+using Movie_Characters_API.Exceptions;
 
 namespace Movie_Characters_API.Services.FranchiseDataAccess
 {
@@ -25,18 +26,18 @@ namespace Movie_Characters_API.Services.FranchiseDataAccess
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Franchise>> GetAll()
+        public async Task<IEnumerable<Franchise>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Franchises.Include(x => x.Movies).ToListAsync();
         }
 
-        public async Franchise GetById(int id)
+        public async Task<Franchise> GetById(int id)
         {
             var franchise = await _context.Franchises.Include(x => x.Movies).FirstOrDefaultAsync(x => x.Id == id);
 
             if (franchise is null)
             {
-                throw new BrandNotFoundException(id);
+                throw new FranchiseNotFoundException(id);
             }
 
             return franchise;

@@ -5,7 +5,7 @@
 
         Task<IEnumerable<T>> GetAll();
 
-        T GetById(ID id);
+        Task<T> GetById(ID id);
 
         Task<T> Create(T obj);
 
