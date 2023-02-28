@@ -1,16 +1,16 @@
-﻿namespace Movie_Characters_API.Service
+﻿namespace Movie_Characters_API.Services
 {
     public interface ICrudRepository<T, ID>
     {
 
-        IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAll();
 
         T GetById(ID id);
 
-        void Add(T obj);
+        Task<T> Create(T obj);
 
-        void Update(T obj);
+        Task<T> Update(T obj);
 
-        void Deletes(T obj);
+        Task Deletes(ID id);
     }
 }
