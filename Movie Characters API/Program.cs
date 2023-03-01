@@ -21,9 +21,9 @@ builder.Services.AddDbContext<MovieDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 //Services for DataAccess
-builder.Services.AddTransient<ICharacterService, CharacterService>();
-builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<IFranchiseService, FranchiseService>();
+builder.Services.AddTransient<IMovieService, MovieService>();
+builder.Services.AddTransient<ICharacterService, CharacterService>();
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 

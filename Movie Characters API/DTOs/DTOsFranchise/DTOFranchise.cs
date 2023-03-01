@@ -15,5 +15,7 @@ namespace Movie_Characters_API.DTOModels.DTOFranchiseModels
         [MaxLength(2000)]
         public string Description { get; set; }
 
+        public List<string> Movies { get; set; }
+
     }
 }
