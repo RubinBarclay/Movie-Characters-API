@@ -6,7 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Movie_Characters_API.DTOs.DTOFranchise;
+using Movie_Characters_API.DTOs.DTOsFranchise;
 using Movie_Characters_API.Exceptions;
 using Movie_Characters_API.Models;
 using Movie_Characters_API.Services.FranchiseDataAccess;
@@ -55,16 +55,16 @@ namespace Movie_Characters_API.Controllers
         // PUT: api/franchises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFranchise(int id, Franchise franchise)
+        public async Task<IActionResult> PutFranchise(int id, [FromBody] DTOFranchise franchise)
         {
             if (id != franchise.Id)
             {
                 return BadRequest();
             }
-
+            var obj = _mapper.Map<Franchise>(franchise);
             try
             {
-                await _franchisecontext.Update(franchise);
+                await _franchisecontext.Update(obj);
             }
             catch (FranchiseNotFoundException ex)
             {
@@ -73,6 +73,7 @@ namespace Movie_Characters_API.Controllers
                     Detail = ex.Message
                 });
             }
+
 
             return NoContent();
         }

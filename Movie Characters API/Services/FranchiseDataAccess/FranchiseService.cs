@@ -54,7 +54,6 @@ namespace Movie_Characters_API.Services.FranchiseDataAccess
             _context.Entry(obj).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return obj;
-
         }
     }
 }

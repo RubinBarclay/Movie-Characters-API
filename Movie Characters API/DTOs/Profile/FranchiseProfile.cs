@@ -9,7 +9,7 @@ namespace Movie_Characters_API.DTOs.Profiles
     {
         public FranchiseProfile()
         {
-            CreateMap<Franchise, DTOFranchise>();
+            CreateMap<DTOFranchise,Franchise>();
             CreateMap<Franchise, DTOGetFranchise>()
                 .ForMember(dto => dto.Movies, options =>
                 options.MapFrom(movieDomain => movieDomain.Movies.Select(Movies => $"api/v1/movies/{Movies.Id}").ToList()));
