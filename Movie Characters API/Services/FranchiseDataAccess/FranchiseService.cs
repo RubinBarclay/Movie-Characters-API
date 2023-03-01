@@ -44,9 +44,17 @@ namespace Movie_Characters_API.Services.FranchiseDataAccess
 
         }
 
-        public Task<Franchise> Update(Franchise obj)
+        public async Task<Franchise> Update(Franchise obj)
         {
-            throw new NotImplementedException();
+            var foundFranchise = await _context.Franchises.AnyAsync(x => x.Id == obj.Id);
+            if (!foundFranchise)
+            {
+                throw new FranchiseNotFoundException(obj.Id);
+            }
+            _context.Entry(obj).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return obj;
+
         }
     }
 }

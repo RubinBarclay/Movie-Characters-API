@@ -6,7 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Movie_Characters_API.DTOModels.DTOFranchiseModels;
+using Movie_Characters_API.DTOs.DTOFranchise;
 using Movie_Characters_API.Exceptions;
 using Movie_Characters_API.Models;
 using Movie_Characters_API.Services.FranchiseDataAccess;
@@ -28,18 +28,18 @@ namespace Movie_Characters_API.Controllers
 
         // GET: api/franchises
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DTOFranchise>>> GetFranchises()
+        public async Task<ActionResult<IEnumerable<DTOGetFranchise>>> GetFranchises()
         {
-            return Ok(_mapper.Map<IEnumerable<DTOFranchise>>(await _franchisecontext.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<DTOGetFranchise>>(await _franchisecontext.GetAll()));
         }
 
         // GET: api/franchises/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<DTOFranchise>> GetFranchiseById(int id)
+        public async Task<ActionResult<DTOGetFranchise>> GetFranchiseById(int id)
         {
             try
             {
-                return Ok(_mapper.Map<DTOFranchise>(await _franchisecontext.GetById(id)));
+                return Ok(_mapper.Map<DTOGetFranchise>(await _franchisecontext.GetById(id)));
             }
             catch (FranchiseNotFoundException ex)
             {
@@ -52,7 +52,7 @@ namespace Movie_Characters_API.Controllers
 
 
 
-        // PUT: api/Franchises/5
+        // PUT: api/franchises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFranchise(int id, Franchise franchise)
@@ -62,22 +62,16 @@ namespace Movie_Characters_API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(franchise).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _franchisecontext.Update(franchise);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (FranchiseNotFoundException ex)
             {
-                if (!FranchiseExists(id))
+                return NotFound(new ProblemDetails
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    Detail = ex.Message
+                });
             }
 
             return NoContent();

@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Movie_Characters_API.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Movie_Characters_API.DTOs.DTOsFranchise
 {
-    public class DTOFranchise
+    public class DTOGetFranchise
     {
-
         public int Id { get; set; }
 
         [Required]
@@ -14,5 +14,8 @@ namespace Movie_Characters_API.DTOs.DTOsFranchise
         [Required]
         [MaxLength(2000)]
         public string Description { get; set; }
+
+        public List<string> Movies { get; set; }
+
     }
 }
