@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -55,7 +56,7 @@ namespace Movie_Characters_API.Controllers
         // PUT: api/franchises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFranchise(int id, [FromBody] DTOFranchise franchise)
+        public async Task<IActionResult> PutFranchise(int id, [FromBody] DTOPutFranchise franchise)
         {
             if (id != franchise.Id)
             {
@@ -78,16 +79,16 @@ namespace Movie_Characters_API.Controllers
             return NoContent();
         }
 
-        //// POST: api/Franchises
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Franchise>> PostFranchise(Franchise franchise)
-        //{
-        //    _context.Franchises.Add(franchise);
-        //    await _context.SaveChangesAsync();
+        // POST: api/Franchises
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Franchise>> PostFranchise(DTOCreateFranchise createFranchiseDto)
+        {
+            var franchise = _mapper.Map<Franchise>(createFranchiseDto);
+            await _franchisecontext.Create(franchise);
+            return CreatedAtAction(nameof(GetFranchiseById), new { id = franchise.Id }, franchise);
 
-        //    return CreatedAtAction("GetFranchise", new { id = franchise.Id }, franchise);
-        //}
+        }
 
         //// DELETE: api/Franchises/5
         //[HttpDelete("{id}")]

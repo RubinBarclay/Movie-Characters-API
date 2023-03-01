@@ -2,10 +2,8 @@
 
 namespace Movie_Characters_API.DTOs.DTOsFranchise
 {
-    public class DTOFranchise
+    public class DTOCreateFranchise
     {
-
-        public int Id { get; set; }
 
         [Required]
         [MaxLength(200)]
@@ -14,5 +12,6 @@ namespace Movie_Characters_API.DTOs.DTOsFranchise
         [Required]
         [MaxLength(2000)]
         public string Description { get; set; }
+
     }
 }
