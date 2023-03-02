@@ -15,6 +15,7 @@ namespace Movie_Characters_API.DTOs.DTOsCharacter
         [Required]
         [MaxLength(6)]
         public string Gender { get; set; }
+
         [Required]
         [Url]
         public string PictureUrl { get; set; }

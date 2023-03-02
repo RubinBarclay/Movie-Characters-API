@@ -27,14 +27,14 @@ namespace Movie_Characters_API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/franchises
+        // GET: api/v1/franchises
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DTOGetFranchise>>> GetFranchises()
         {
             return Ok(_mapper.Map<IEnumerable<DTOGetFranchise>>(await _franchisecontext.GetAll()));
         }
 
-        // GET: api/franchises/{id}
+        // GET: api/v1/franchises/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<DTOGetFranchise>> GetFranchiseById(int id)
         {
@@ -53,7 +53,7 @@ namespace Movie_Characters_API.Controllers
 
 
 
-        // PUT: api/franchises/5
+        // PUT: api/v1/franchises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFranchise(int id, [FromBody] DTOPutFranchise franchise)
@@ -79,7 +79,7 @@ namespace Movie_Characters_API.Controllers
             return NoContent();
         }
 
-        // POST: api/Franchises
+        // POST: api/v1/franchises
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Franchise>> PostFranchise(DTOCreateFranchise createFranchiseDto)
@@ -90,7 +90,7 @@ namespace Movie_Characters_API.Controllers
 
         }
 
-        // DELETE: api/Franchises/5
+        // DELETE: api/v1/franchises/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFranchise(int id)
         {

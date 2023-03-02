@@ -11,13 +11,10 @@ namespace Movie_Characters_API.DTOs.Profiles
         public CharacterProfile()
         {
             CreateMap<DTOCreateCharacter, Character>();
-            CreateMap< DTOPutCharacter,Character>();
+            CreateMap<DTOPutCharacter,Character>();
             CreateMap<Character, DTOGetCharacter>()
                 .ForMember(dto => dto.Movies, options =>
                 options.MapFrom(movieDomain => movieDomain.MoviesList.Select(Movies => $"api/v1/movies/{Movies.Id}").ToList()));
-        }
-
-        
-                
+        }     
     }
 }

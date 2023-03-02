@@ -33,7 +33,7 @@ namespace Movie_Characters_API.Models
 
             modelBuilder.Entity<Movie>()
                 .HasMany(p => p.Characters)
-                .WithMany(m => m.Movies)
+                .WithMany(m => m.MoviesList)
                 .UsingEntity<Dictionary<string, object>>(
                     "CharacterMovie",
                     r => r.HasOne<Character>().WithMany().HasForeignKey("CharacterId"),

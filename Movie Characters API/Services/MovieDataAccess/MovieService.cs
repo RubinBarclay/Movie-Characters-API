@@ -1,4 +1,6 @@
-﻿using Movie_Characters_API.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Movie_Characters_API.Exceptions;
+using Movie_Characters_API.Models;
 
 namespace Movie_Characters_API.Services.MovieDataAccess
 {
@@ -10,29 +12,53 @@ namespace Movie_Characters_API.Services.MovieDataAccess
         {
             _context = context;
         }
-        public Task<Movie> Create(Movie obj)
+        public async Task<Movie> Create(Movie obj)
         {
-            throw new NotImplementedException();
+            await _context.Movies.AddAsync(obj);
+            await _context.SaveChangesAsync();
+            return obj;
         }
 
-        public Task Deletes(int id)
+        public async Task Deletes(int id)
         {
-            throw new NotImplementedException();
+            var movies = await _context.Movies.FindAsync(id);
+            if (movies == null)
+            {
+                throw new MovieNotFoundException(id);
+            }
+
+
+            _context.Movies.Remove(movies);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Movie>> GetAll()
+        public async Task<IEnumerable<Movie>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Movies.Include(x => x.Characters).ToListAsync();
         }
 
-        public Task<Movie> GetById(int id)
+        public async Task<Movie> GetById(int id)
         {
-            throw new NotImplementedException();
+            var movie = await _context.Movies.Include(x => x.Characters).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (movie is null)
+            {
+                throw new MovieNotFoundException(id);
+            }
+
+            return movie;
         }
 
-        public Task<Movie> Update(Movie obj)
+        public async Task<Movie> Update(Movie obj)
         {
-            throw new NotImplementedException();
+            var foundMovie = await _context.Movies.AnyAsync(x => x.Id == obj.Id);
+            if (!foundMovie)
+            {
+                throw new MovieNotFoundException(obj.Id);
+            }
+            _context.Entry(obj).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return obj;
         }
     }
 }

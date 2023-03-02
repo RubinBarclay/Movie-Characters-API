@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Movie_Characters_API.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace Movie_Characters_API.Models
+namespace Movie_Characters_API.DTOs.DTOsMovie
 {
-    public class Movie
+    public class DTOGetMovie
     {
         public int Id { get; set; }
 
@@ -24,9 +25,9 @@ namespace Movie_Characters_API.Models
         [Required]
         [Url]
         public string TrailerUrl { get; set; }
-        public ICollection<Character>? Characters { get; set;}
-        public Franchise? Franchise { get; set; }
-        public int? FranchiseId { get; set; }
+        public int FranchiseId { get; set; }
+        public List<string> Characters { get; set; }
+
 
     }
 }
