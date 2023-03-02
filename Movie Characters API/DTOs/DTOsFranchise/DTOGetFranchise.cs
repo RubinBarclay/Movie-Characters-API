@@ -1,4 +1,4 @@
-﻿using Movie_Characters_API.Models;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace Movie_Characters_API.DTOs.DTOsFranchise

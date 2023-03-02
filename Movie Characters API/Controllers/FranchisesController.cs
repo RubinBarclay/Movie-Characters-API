@@ -110,9 +110,5 @@ namespace Movie_Characters_API.Controllers
 
         }
 
-        //private bool FranchiseExists(int id)
-        //{
-        //    return _context.Franchises.Any(e => e.Id == id);
-        //}
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Movie_Characters_API.Models;
 using Movie_Characters_API.Services.CharacterDataAccess;
 using Microsoft.EntityFrameworkCore;
+using Movie_Characters_API.Exceptions;
 
 namespace Movie_Characters_API.Services.CharacterDataAccess
 {
@@ -13,29 +14,54 @@ namespace Movie_Characters_API.Services.CharacterDataAccess
             _context = context;
         }
 
-        public Task<Character> Create(Character obj)
+        public async Task<Character> Create(Character obj)
         {
-            throw new NotImplementedException();
+            await _context.Characters.AddAsync(obj);
+            await _context.SaveChangesAsync();
+            return obj;
         }
 
-        public Task Deletes(int id)
+        public async Task Deletes(int id)
         {
-            throw new NotImplementedException();
+            var character = await _context.Characters.FindAsync(id);
+            if (character == null)
+            {
+                throw new CharacterNotFoundException(id);
+            }
+
+
+            _context.Characters.Remove(character);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Character>> GetAll()
+        public async Task<IEnumerable<Character>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Characters.Include(x => x.MoviesList).ToListAsync();
+             
         }
 
-        public Task<Character> GetById(int id)
+        public async Task<Character> GetById(int id)
         {
-            throw new NotImplementedException();
+            var character = await _context.Characters.Include(x => x.MoviesList).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (character is null)
+            {
+                throw new CharacterNotFoundException(id);
+            }
+
+            return character;
         }
 
-        public Task<Character> Update(Character obj)
+        public async Task<Character> Update(Character obj)
         {
-            throw new NotImplementedException();
+            var foundCharacter = await _context.Characters.AnyAsync(x => x.Id == obj.Id);
+            if (!foundCharacter)
+            {
+                throw new CharacterNotFoundException(obj.Id);
+            }
+            _context.Entry(obj).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return obj;
         }
     }
 }
