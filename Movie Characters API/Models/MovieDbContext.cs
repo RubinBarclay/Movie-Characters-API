@@ -7,8 +7,8 @@ namespace Movie_Characters_API.Models
     public class MovieDbContext : DbContext
     {
         public DbSet<Movie> Movies { get; set; } 
-      public DbSet<Franchise> Franchises { get; set; } 
-      public DbSet<Character> Characters { get; set; } 
+        public DbSet<Franchise> Franchises { get; set; } 
+        public DbSet<Character> Characters { get; set; } 
 
         public MovieDbContext(DbContextOptions<MovieDbContext> options)
             : base(options)
@@ -47,7 +47,7 @@ namespace Movie_Characters_API.Models
                             new { MovieId = 3, CharacterId = 3 }
                         );
                     });
-
         }
+
     }
 }

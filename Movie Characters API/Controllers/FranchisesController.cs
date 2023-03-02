@@ -90,21 +90,25 @@ namespace Movie_Characters_API.Controllers
 
         }
 
-        //// DELETE: api/Franchises/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteFranchise(int id)
-        //{
-        //    var franchise = await _context.Franchises.FindAsync(id);
-        //    if (franchise == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // DELETE: api/Franchises/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteFranchise(int id)
+        {
+            try
+            {
+                await _franchisecontext.Deletes(id);
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message
+                });
+            }
 
-        //    _context.Franchises.Remove(franchise);
-        //    await _context.SaveChangesAsync();
+            return NoContent();
 
-        //    return NoContent();
-        //}
+        }
 
         //private bool FranchiseExists(int id)
         //{

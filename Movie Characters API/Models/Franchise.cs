@@ -13,6 +13,6 @@ namespace Movie_Characters_API.Models
         [Required]
         [MaxLength(2000)]
         public string Description { get; set; }
-        public ICollection<Movie>? Movies { get; set; }
+        public ICollection<Movie>? MovieList { get; set; }
     }
 }

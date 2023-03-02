@@ -2,6 +2,7 @@
 using Movie_Characters_API.Services.FranchiseDataAccess;
 using Microsoft.EntityFrameworkCore;
 using Movie_Characters_API.Exceptions;
+using System.Reflection.Emit;
 
 namespace Movie_Characters_API.Services.FranchiseDataAccess
 {
@@ -21,19 +22,27 @@ namespace Movie_Characters_API.Services.FranchiseDataAccess
             return obj;
         }
 
-        public Task Deletes(int id)
+        public async Task Deletes(int id)
         {
-            throw new NotImplementedException();
+            var franchis = await _context.Franchises.FindAsync(id);
+            if (franchis == null)
+            {
+                throw new FranchiseNotFoundException(id);
+            }
+            
+
+            _context.Franchises.Remove(franchis);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Franchise>> GetAll()
         {
-            return await _context.Franchises.Include(x => x.Movies).ToListAsync();
+            return await _context.Franchises.Include(x => x.MovieList).ToListAsync();
         }
 
         public async Task<Franchise> GetById(int id)
         {
-            var franchise = await _context.Franchises.Include(x => x.Movies).FirstOrDefaultAsync(x => x.Id == id);
+            var franchise = await _context.Franchises.Include(x => x.MovieList).FirstOrDefaultAsync(x => x.Id == id);
 
             if (franchise is null)
             {
