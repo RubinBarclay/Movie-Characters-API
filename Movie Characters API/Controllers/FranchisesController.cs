@@ -102,51 +102,53 @@ namespace Movie_Characters_API.Controllers
         /// <summary>
         /// Update movies in a franchise
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="franchiseMovieList"></param>
+        /// <param name="franchiseid"></param>
+        /// <param name="movieID"></param>
         /// <returns></returns>
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateMoviesInFranchise(int id, [FromBody] int[] movieID)
+        [HttpPut("update/{franchiseid}")]
+        public async Task<IActionResult> UpdateMoviesInFranchise(int franchiseid, [FromBody] int[] movieID)
         {
-
-
+            Franchise franchisebyId;
             try
             {
-                var franchise = await _franchisecontext.ReadById(id);
-                if (franchise.MovieList != null)
-                    franchise.MovieList.Clear();
+                franchisebyId = await _franchisecontext.ReadById(franchiseid);
+                franchisebyId.MovieList.Clear();
+                await _franchisecontext.Update(franchisebyId);
+
             }
-            catch (FranchiseNotFoundException ex)
+            catch (MovieNotFoundException ex)
             {
                 return NotFound(new ProblemDetails
                 {
                     Detail = ex.Message
                 });
             }
+                
 
-            if (movieID != null)
+            for (int i = 0; i < movieID.Length; i++)
             {
-                for(int i = 0;i<movieID.Length;i++) 
+
+                try
                 {
-                    
-                    try
+                    var movie = await _moviecontext.ReadById(movieID[i]);
+                    movie.FranchiseId = franchiseid;
+                    await _moviecontext.Update(movie);
+
+                }
+                catch (CharacterNotFoundException ex)
+                {
+                    return NotFound(new ProblemDetails
                     {
-                        var movie = await _moviecontext.ReadById(movieID[i]);
-                        movie.FranchiseId = id;
-                        await _moviecontext.Update(movie);
-                    }
-                    catch (MovieNotFoundException ex)
-                    {
-                        return NotFound(new ProblemDetails
-                        {
-                            Detail = ex.Message
-                        });
-                    }
+                        Detail = ex.Message
+                    });
+                }
+                if (i == (movieID.Length - 1))
+                {
+                    return NoContent();
                 }
             }
-            
-
-            return NoContent();
+            return BadRequest();
+         
         }
 
 

@@ -95,34 +95,19 @@ namespace Movie_Characters_API.Controllers
         /// <summary>
         /// Update characters in a movie
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="characterList"></param>
+        /// <param name="movieid"></param>
+        /// <param name="characterID"></param>
         /// <returns></returns>
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> PutCharactersInMovie(int id, [FromBody] DTOPutCharactersInMovie characterList)
+        [HttpPut("update/{movieid}")]
+        public async Task<IActionResult> PutCharactersInMovie(int movieid, [FromBody] int[] characterID)
         {
+            Movie moviebyId;
             try
             {
-                var movie = await _moviecontext.ReadById(id);
-                if (movie.Characters != null)
-                    movie.Characters.Clear();
-                if (characterList.CharacterIds != null)
-                    foreach (var characterId in characterList.CharacterIds)
-                    {
-                        var character = await _characterService.ReadById(characterId);
-                        character.MoviesList.Add(movie);
-                        try
-                        {
-                            await _characterService.Update(character);
-                        }
-                        catch (CharacterNotFoundException ex)
-                        {
-                            return NotFound(new ProblemDetails
-                            {
-                                Detail = ex.Message
-                            });
-                        }
-                    }
+                moviebyId = await _moviecontext.ReadById(movieid);
+                moviebyId.Characters.Clear();
+                await _moviecontext.Update(moviebyId);
+
             }
             catch (MovieNotFoundException ex)
             {
@@ -131,7 +116,30 @@ namespace Movie_Characters_API.Controllers
                     Detail = ex.Message
                 });
             }
-            return NoContent();
+
+            for (int i = 0; i < characterID.Length; i++)
+            {
+
+                try
+                {
+                    var character = await _characterService.ReadById(characterID[i]);
+                    character.MoviesList.Add(moviebyId);
+                    await _characterService.Update(character);
+                    
+                }
+                catch (CharacterNotFoundException ex)
+                {
+                    return NotFound(new ProblemDetails
+                    {
+                        Detail = ex.Message
+                    });
+                }
+                if (i == (characterID.Length-1))
+                {
+                    return NoContent();
+                }
+            }
+            return BadRequest();
         }
 
         /// <summary>
