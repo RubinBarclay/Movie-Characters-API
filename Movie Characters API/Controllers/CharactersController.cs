@@ -32,9 +32,8 @@ namespace Movie_Characters_API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/v1/characters
         /// <summary>
-        /// Get all characters
+        /// List of characters
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -45,7 +44,7 @@ namespace Movie_Characters_API.Controllers
 
         // GET: api/characters/5
         /// <summary>
-        /// Get character by id
+        /// Character by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -65,10 +64,8 @@ namespace Movie_Characters_API.Controllers
             }
         }
 
-        // PUT: api/characters/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         /// <summary>
-        /// Update character
+        /// Edit a character
         /// </summary>
         /// <param name="id"></param>
         /// <param name="character"></param>
@@ -97,10 +94,9 @@ namespace Movie_Characters_API.Controllers
             return NoContent();
         }
 
-        // POST: api/characters
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         /// <summary>
-        /// Create character
+        /// Create a character
         /// </summary>
         /// <param name="createCharacterDto"></param>
         /// <returns></returns>
@@ -112,9 +108,9 @@ namespace Movie_Characters_API.Controllers
             return CreatedAtAction(nameof(GetCharacterById), new { id = character.Id }, character);
         }
 
-        // DELETE: api/characters/5
+
         /// <summary>
-        /// Delete character
+        /// Delete a character
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

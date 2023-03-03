@@ -16,7 +16,7 @@ using Movie_Characters_API.Services.MovieDataAccess;
 
 namespace Movie_Characters_API.Controllers
 {
-    [Route("api/v1/[controller]/[action]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
@@ -34,9 +34,8 @@ namespace Movie_Characters_API.Controllers
             _moviecontext = movieContext;
         }
 
-        // GET: api/v1/franchises/GetAllFranchises
         /// <summary>
-        /// Get all franchises
+        /// List of franchises
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -45,9 +44,8 @@ namespace Movie_Characters_API.Controllers
             return Ok(_mapper.Map<IEnumerable<DTOGetFranchise>>(await _franchisecontext.ReadAll()));
         }
 
-        // GET: api/v1/franchises/GetFranchiseById/{id}
         /// <summary>
-        /// Get franchise by id
+        /// Franchise by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -68,11 +66,8 @@ namespace Movie_Characters_API.Controllers
         }
 
 
-
-        // PUT: api/v1/franchises/PutFranchise/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         /// <summary>
-        /// Update franchise
+        /// Edit a franchise
         /// </summary>
         /// <param name="id"></param>
         /// <param name="franchise"></param>
@@ -103,16 +98,15 @@ namespace Movie_Characters_API.Controllers
         }
 
 
-        // PUT: api/v1/franchises/putmoviesmnfranchise/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         /// <summary>
-        /// Update movies in franchise
+        /// Update movies in a franchise
         /// </summary>
         /// <param name="id"></param>
         /// <param name="franchiseMovieList"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMoviesInFranchise(int id, [FromBody] DTOPutMoviesInFranchise franchiseMovieList)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateMoviesInFranchise(int id, [FromBody] DTOPutMoviesInFranchise franchiseMovieList)
         {
 
             
@@ -142,10 +136,9 @@ namespace Movie_Characters_API.Controllers
             return NoContent();
         }
 
-        // POST: api/v1/franchises/postFranchise
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         /// <summary>
-        /// Create franchise
+        /// Create a franchise
         /// </summary>
         /// <param name="createFranchiseDto"></param>
         /// <returns></returns>
@@ -158,7 +151,11 @@ namespace Movie_Characters_API.Controllers
 
         }
 
-        // DELETE: api/v1/franchises/5
+        /// <summary>
+        /// Delete a franchise
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFranchise(int id)
         {
