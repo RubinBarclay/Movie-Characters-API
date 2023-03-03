@@ -100,12 +100,12 @@ Example request body
 ```
 #### Update characters in a movie
 ```
-PUT /api/v1/movies/update/<id>
+PUT /api/v1/movies/update/<movieid>
 ```
 Example request body
 ```
 {
-  "characterIds": [
+  [
     0
   ]
 }
@@ -149,12 +149,12 @@ Example request body
 ```
 #### Update movies in a franchise
 ```
-PUT /api/v1/franchises/update/<id>
+PUT /api/v1/franchises/update/<franchiseid>
 ```
 Example request body
 ```
 {
-  "movieIds": [
+  [
     0
   ]
 }
