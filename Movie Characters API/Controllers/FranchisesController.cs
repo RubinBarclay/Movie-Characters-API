@@ -106,33 +106,46 @@ namespace Movie_Characters_API.Controllers
         /// <param name="franchiseMovieList"></param>
         /// <returns></returns>
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateMoviesInFranchise(int id, [FromBody] DTOPutMoviesInFranchise franchiseMovieList)
+        public async Task<IActionResult> UpdateMoviesInFranchise(int id, [FromBody] int[] movieID)
         {
 
-            
-            var franchise = await _franchisecontext.ReadById(id);
-            if (franchise.MovieList != null)
-                franchise.MovieList.Clear();
 
-
-            if (franchiseMovieList.MovieIds != null)
-            foreach (var movieId in franchiseMovieList.MovieIds)
+            try
             {
-                var movie = await _moviecontext.ReadById(movieId);
-                movie.FranchiseId = movieId;
-                try
+                var franchise = await _franchisecontext.ReadById(id);
+                if (franchise.MovieList != null)
+                    franchise.MovieList.Clear();
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
                 {
-                    await _moviecontext.Update(movie);
-                }
-                catch (MovieNotFoundException ex)
+                    Detail = ex.Message
+                });
+            }
+
+            if (movieID != null)
+            {
+                for(int i = 0;i<movieID.Length;i++) 
                 {
-                    return NotFound(new ProblemDetails
+                    
+                    try
                     {
-                        Detail = ex.Message
-                    });
+                        var movie = await _moviecontext.ReadById(movieID[i]);
+                        movie.FranchiseId = id;
+                        await _moviecontext.Update(movie);
+                    }
+                    catch (MovieNotFoundException ex)
+                    {
+                        return NotFound(new ProblemDetails
+                        {
+                            Detail = ex.Message
+                        });
+                    }
                 }
             }
-       
+            
+
             return NoContent();
         }
 

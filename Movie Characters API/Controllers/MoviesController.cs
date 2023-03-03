@@ -101,7 +101,6 @@ namespace Movie_Characters_API.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> PutCharactersInMovie(int id, [FromBody] DTOPutCharactersInMovie characterList)
         {
-            
             try
             {
                 var movie = await _moviecontext.ReadById(id);
