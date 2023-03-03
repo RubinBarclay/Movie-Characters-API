@@ -2,7 +2,7 @@
 
 namespace Movie_Characters_API.DTOs.DTOsFranchise
 {
-    public class DTOCreateFranchise
+    public class DTOPostFranchise
     {
 
         [Required]

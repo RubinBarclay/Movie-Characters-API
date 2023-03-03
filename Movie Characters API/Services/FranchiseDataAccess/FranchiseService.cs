@@ -22,7 +22,7 @@ namespace Movie_Characters_API.Services.FranchiseDataAccess
             return obj;
         }
 
-        public async Task Deletes(int id)
+        public async Task Delete(int id)
         {
             var franchis = await _context.Franchises.FindAsync(id);
             if (franchis == null)
@@ -35,12 +35,12 @@ namespace Movie_Characters_API.Services.FranchiseDataAccess
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Franchise>> GetAll()
+        public async Task<IEnumerable<Franchise>> ReadAll()
         {
             return await _context.Franchises.Include(x => x.MovieList).ToListAsync();
         }
 
-        public async Task<Franchise> GetById(int id)
+        public async Task<Franchise> ReadById(int id)
         {
             var franchise = await _context.Franchises.Include(x => x.MovieList).FirstOrDefaultAsync(x => x.Id == id);
 

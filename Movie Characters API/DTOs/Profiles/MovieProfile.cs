@@ -10,7 +10,7 @@ namespace Movie_Characters_API.DTOs.Profiles
     {
         public MovieProfile() 
         {
-            CreateMap<DTOCreateMovie, Movie>();
+            CreateMap<DTOPostMovie, Movie>();
             CreateMap<DTOPutMovie, Movie>();
             CreateMap<Movie, DTOGetMovie>()
                .ForMember(dto => dto.Characters, options =>

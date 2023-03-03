@@ -9,7 +9,7 @@ namespace Movie_Characters_API.DTOs.Profiles
     {
         public FranchiseProfile()
         {
-            CreateMap<DTOCreateFranchise, Franchise>();
+            CreateMap<DTOPostFranchise, Franchise>();
             CreateMap<DTOPutFranchise,Franchise>();
             CreateMap<Franchise, DTOGetFranchise>()
                 .ForMember(dto => dto.Movies, options =>

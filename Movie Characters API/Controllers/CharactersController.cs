@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +18,9 @@ namespace Movie_Characters_API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class CharactersController : ControllerBase
     {
         private readonly ICharacterService _charactercontext;
@@ -29,19 +33,28 @@ namespace Movie_Characters_API.Controllers
         }
 
         // GET: api/v1/characters
+        /// <summary>
+        /// Get all characters
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DTOGetCharacter>>> GetAllCharacters()
         {
-            return Ok(_mapper.Map<IEnumerable<DTOGetCharacter>>(await _charactercontext.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<DTOGetCharacter>>(await _charactercontext.ReadAll()));
         }
 
         // GET: api/characters/5
+        /// <summary>
+        /// Get character by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<DTOGetCharacter>> GetCharacterById(int id)
         {
             try
             {
-                return Ok(_mapper.Map<DTOGetCharacter>(await _charactercontext.GetById(id)));
+                return Ok(_mapper.Map<DTOGetCharacter>(await _charactercontext.ReadById(id)));
             }
             catch (CharacterNotFoundException ex)
             {
@@ -54,6 +67,12 @@ namespace Movie_Characters_API.Controllers
 
         // PUT: api/characters/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update character
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="character"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCharacter(int id, [FromBody] DTOPutCharacter character)
         {
@@ -78,23 +97,33 @@ namespace Movie_Characters_API.Controllers
             return NoContent();
         }
 
-        // POST: api/Characters
+        // POST: api/characters
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create character
+        /// </summary>
+        /// <param name="createCharacterDto"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Character>> PostCharacter(DTOCreateCharacter createCharacterDto)
+        public async Task<ActionResult<Character>> PostCharacter(DTOPostCharacter createCharacterDto)
         {
             var character = _mapper.Map<Character>(createCharacterDto);
             await _charactercontext.Create(character);
             return CreatedAtAction(nameof(GetCharacterById), new { id = character.Id }, character);
         }
 
-        // DELETE: api/Characters/5
+        // DELETE: api/characters/5
+        /// <summary>
+        /// Delete character
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCharacter(int id)
         {
             try
             {
-                await _charactercontext.Deletes(id);
+                await _charactercontext.Delete(id);
             }
             catch (CharacterNotFoundException ex)
             {

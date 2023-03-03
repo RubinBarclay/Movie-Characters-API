@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +18,9 @@ namespace Movie_Characters_API.Controllers
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class FranchisesController : ControllerBase
     {
         private readonly IFranchiseService _franchisecontext;
@@ -30,20 +34,29 @@ namespace Movie_Characters_API.Controllers
             _moviecontext = movieContext;
         }
 
-        // GET: api/v1/franchises
+        // GET: api/v1/franchises/GetAllFranchises
+        /// <summary>
+        /// Get all franchises
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DTOGetFranchise>>> GetFranchises()
+        public async Task<ActionResult<IEnumerable<DTOGetFranchise>>> GetAllFranchises()
         {
-            return Ok(_mapper.Map<IEnumerable<DTOGetFranchise>>(await _franchisecontext.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<DTOGetFranchise>>(await _franchisecontext.ReadAll()));
         }
 
-        // GET: api/v1/franchises/{id}
+        // GET: api/v1/franchises/GetFranchiseById/{id}
+        /// <summary>
+        /// Get franchise by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<DTOGetFranchise>> GetFranchiseById(int id)
         {
             try
             {
-                return Ok(_mapper.Map<DTOGetFranchise>(await _franchisecontext.GetById(id)));
+                return Ok(_mapper.Map<DTOGetFranchise>(await _franchisecontext.ReadById(id)));
             }
             catch (FranchiseNotFoundException ex)
             {
@@ -56,8 +69,14 @@ namespace Movie_Characters_API.Controllers
 
 
 
-        // PUT: api/v1/franchises/5
+        // PUT: api/v1/franchises/PutFranchise/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update franchise
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="franchise"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
 
         public async Task<IActionResult> PutFranchise(int id, DTOPutFranchise franchise)
@@ -84,14 +103,20 @@ namespace Movie_Characters_API.Controllers
         }
 
 
-        // PUT: api/v1/franchises/5
+        // PUT: api/v1/franchises/putmoviesmnfranchise/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update movies in franchise
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="franchiseMovieList"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMoviesInFranchise(int id, [FromBody] DTOPutMoviesInFranchise franchiseMovieList)
         {
 
             
-            var franchise = await _franchisecontext.GetById(id);
+            var franchise = await _franchisecontext.ReadById(id);
             if (franchise.MovieList != null)
                 franchise.MovieList.Clear();
 
@@ -99,7 +124,7 @@ namespace Movie_Characters_API.Controllers
             if (franchiseMovieList.MovieIds != null)
             foreach (var movieId in franchiseMovieList.MovieIds)
             {
-                var movie = await _moviecontext.GetById(movieId);
+                var movie = await _moviecontext.ReadById(movieId);
                 movie.FranchiseId = movieId;
                 try
                 {
@@ -117,10 +142,15 @@ namespace Movie_Characters_API.Controllers
             return NoContent();
         }
 
-        // POST: api/v1/franchises
+        // POST: api/v1/franchises/postFranchise
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create franchise
+        /// </summary>
+        /// <param name="createFranchiseDto"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Franchise>> PostFranchise(DTOCreateFranchise createFranchiseDto)
+        public async Task<ActionResult<Franchise>> PostFranchise(DTOPostFranchise createFranchiseDto)
         {
             var franchise = _mapper.Map<Franchise>(createFranchiseDto);
             await _franchisecontext.Create(franchise);
@@ -134,7 +164,7 @@ namespace Movie_Characters_API.Controllers
         {
             try
             {
-                await _franchisecontext.Deletes(id);
+                await _franchisecontext.Delete(id);
             }
             catch (FranchiseNotFoundException ex)
             {

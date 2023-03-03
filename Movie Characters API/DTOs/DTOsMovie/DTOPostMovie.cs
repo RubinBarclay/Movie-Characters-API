@@ -2,7 +2,7 @@
 
 namespace Movie_Characters_API.DTOs.DTOsMovie
 {
-    public class DTOCreateMovie
+    public class DTOPostMovie
     {
         [Required]
         [MaxLength(255)]

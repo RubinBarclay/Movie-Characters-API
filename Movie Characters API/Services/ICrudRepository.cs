@@ -2,15 +2,14 @@
 {
     public interface ICrudRepository<T, ID>
     {
-
-        Task<IEnumerable<T>> GetAll();
-
-        Task<T> GetById(ID id);
-
         Task<T> Create(T obj);
+
+        Task<IEnumerable<T>> ReadAll();
+
+        Task<T> ReadById(ID id);
 
         Task<T> Update(T obj);
 
-        Task Deletes(ID id);
+        Task Delete(ID id);
     }
 }

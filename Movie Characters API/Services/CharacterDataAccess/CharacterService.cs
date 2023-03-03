@@ -21,7 +21,7 @@ namespace Movie_Characters_API.Services.CharacterDataAccess
             return obj;
         }
 
-        public async Task Deletes(int id)
+        public async Task Delete(int id)
         {
             var character = await _context.Characters.FindAsync(id);
             if (character == null)
@@ -34,13 +34,13 @@ namespace Movie_Characters_API.Services.CharacterDataAccess
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Character>> GetAll()
+        public async Task<IEnumerable<Character>> ReadAll()
         {
             return await _context.Characters.Include(x => x.MoviesList).ToListAsync();
              
         }
 
-        public async Task<Character> GetById(int id)
+        public async Task<Character> ReadById(int id)
         {
             var character = await _context.Characters.Include(x => x.MoviesList).FirstOrDefaultAsync(x => x.Id == id);
 
