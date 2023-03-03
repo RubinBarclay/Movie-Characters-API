@@ -89,35 +89,11 @@ namespace Movie_Characters_API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMoviesInFranchise(int id, [FromBody] DTOPutMoviesInFranchise franchiseMovieList)
         {
-            
-            try
-            {
-                var franchise = await _franchisecontext.GetById(id);
-                if(franchise.MovieList != null)
-                foreach (var movie in franchise.MovieList)
-                {
-                    movie.FranchiseId = null;
-                    try
-                    {
-                        await _moviecontext.Update(movie);
-                    }
-                    catch (MovieNotFoundException ex)
-                    {
-                        return NotFound(new ProblemDetails
-                        {
-                            Detail = ex.Message
-                        });
-                    }
-                }
-            }
-            catch (FranchiseNotFoundException ex)
-            {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message
-                });
-            }
 
+            
+            var franchise = await _franchisecontext.GetById(id);
+            if (franchise.MovieList != null)
+                franchise.MovieList.Clear();
 
 
             if (franchiseMovieList.MovieIds != null)
@@ -137,9 +113,7 @@ namespace Movie_Characters_API.Controllers
                     });
                 }
             }
-             
-            
-                      
+       
             return NoContent();
         }
 
