@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Movie_Characters_API.Models
+namespace Movie_Characters_API.DTOs.DTOsMovie
 {
-    public class Movie
+    public class DTOPostMovie
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(255)]
         public string Title { get; set; }
@@ -24,9 +22,6 @@ namespace Movie_Characters_API.Models
         [Required]
         [Url]
         public string TrailerUrl { get; set; }
-        public ICollection<Character>? Characters { get; set;}
-        public Franchise? Franchise { get; set; }
         public int? FranchiseId { get; set; }
-
     }
 }

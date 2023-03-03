@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Movie_Characters_API.Models
+namespace Movie_Characters_API.DTOs.DTOsFranchise
 {
-    public class Franchise
+    public class DTOPostFranchise
     {
-        public int Id { get; set; }
 
         [Required]
         [MaxLength(200)]
@@ -13,6 +12,6 @@ namespace Movie_Characters_API.Models
         [Required]
         [MaxLength(2000)]
         public string Description { get; set; }
-        public ICollection<Movie>? MovieList { get; set; }
+
     }
 }

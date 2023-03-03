@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Movie_Characters_API.Models
+namespace Movie_Characters_API.DTOs.DTOsCharacter
 {
-    public class Character
+    public class DTOPostCharacter
     {
-        public int Id { get; set; }
         [Required]
         [MaxLength(25)]
         public string Name { get; set; }
@@ -14,10 +13,9 @@ namespace Movie_Characters_API.Models
 
         [Required]
         [MaxLength(6)]
-        public string Gender{ get; set; }
+        public string Gender { get; set; }
         [Required]
         [Url]
-        public string PictureUrl { get; set;}
-        public ICollection<Movie>? MoviesList { get; set;}
+        public string PictureUrl { get; set; }
     }
 }
