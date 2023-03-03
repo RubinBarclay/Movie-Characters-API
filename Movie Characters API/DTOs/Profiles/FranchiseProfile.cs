@@ -14,6 +14,7 @@ namespace Movie_Characters_API.DTOs.Profiles
             CreateMap<Franchise, DTOGetFranchise>()
                 .ForMember(dto => dto.Movies, options =>
                 options.MapFrom(movieDomain => movieDomain.MovieList.Select(Movies => $"api/v1/movies/{Movies.Id}").ToList()));
+            CreateMap<DTOPutMoviesInFranchise, DTOPutFranchise>();
         }
 
     }

@@ -11,20 +11,23 @@ using Movie_Characters_API.DTOs.DTOsFranchise;
 using Movie_Characters_API.Exceptions;
 using Movie_Characters_API.Models;
 using Movie_Characters_API.Services.FranchiseDataAccess;
+using Movie_Characters_API.Services.MovieDataAccess;
 
 namespace Movie_Characters_API.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/[controller]/[action]")]
     [ApiController]
     public class FranchisesController : ControllerBase
     {
         private readonly IFranchiseService _franchisecontext;
         private readonly IMapper _mapper;
+        private readonly IMovieService _moviecontext;
 
-        public FranchisesController(IFranchiseService context, IMapper mapper)
+        public FranchisesController(IFranchiseService context, IMapper mapper,IMovieService movieContext)
         {
             _franchisecontext = context;
             _mapper = mapper;
+            _moviecontext = movieContext;
         }
 
         // GET: api/v1/franchises
@@ -56,7 +59,8 @@ namespace Movie_Characters_API.Controllers
         // PUT: api/v1/franchises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFranchise(int id, [FromBody] DTOPutFranchise franchise)
+
+        public async Task<IActionResult> PutFranchise(int id, DTOPutFranchise franchise)
         {
             if (id != franchise.Id)
             {
@@ -76,6 +80,66 @@ namespace Movie_Characters_API.Controllers
             }
 
 
+            return NoContent();
+        }
+
+
+        // PUT: api/v1/franchises/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutMoviesInFranchise(int id, [FromBody] DTOPutMoviesInFranchise franchiseMovieList)
+        {
+            
+            try
+            {
+                var franchise = await _franchisecontext.GetById(id);
+                if(franchise.MovieList != null)
+                foreach (var movie in franchise.MovieList)
+                {
+                    movie.FranchiseId = null;
+                    try
+                    {
+                        await _moviecontext.Update(movie);
+                    }
+                    catch (MovieNotFoundException ex)
+                    {
+                        return NotFound(new ProblemDetails
+                        {
+                            Detail = ex.Message
+                        });
+                    }
+                }
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message
+                });
+            }
+
+
+
+            if (franchiseMovieList.MovieIds != null)
+            foreach (var movieId in franchiseMovieList.MovieIds)
+            {
+                var movie = await _moviecontext.GetById(movieId);
+                movie.FranchiseId = movieId;
+                try
+                {
+                    await _moviecontext.Update(movie);
+                }
+                catch (MovieNotFoundException ex)
+                {
+                    return NotFound(new ProblemDetails
+                    {
+                        Detail = ex.Message
+                    });
+                }
+            }
+             
+            
+                      
             return NoContent();
         }
 

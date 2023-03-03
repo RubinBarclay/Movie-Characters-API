@@ -64,5 +64,6 @@ namespace Movie_Characters_API.Services.FranchiseDataAccess
             await _context.SaveChangesAsync();
             return obj;
         }
+
     }
 }

@@ -5,5 +5,6 @@
         public MovieNotFoundException(int id) : base ($"Movie with id {id} was not found")
         {
         }
+        
     }
 }

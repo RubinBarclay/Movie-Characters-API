@@ -4,5 +4,6 @@ namespace Movie_Characters_API.Services.FranchiseDataAccess
 {
     public interface IFranchiseService : ICrudRepository<Franchise,int>
     {
+    
     }
 }

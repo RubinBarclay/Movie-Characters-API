@@ -52,7 +52,7 @@ namespace Movie_Characters_API.Controllers
         // PUT: api/v1/movies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, [FromBody] DTOPutMovie movie)
+        public async Task<IActionResult> PutMovie(int id, DTOPutMovie movie)
         {
             if (id != movie.Id)
             {
