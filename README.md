@@ -65,6 +65,10 @@ GET /api/v1/movies
 ```
 GET /api/v1/movies/<id>
 ```
+#### Get all characters in movie by id
+```
+GET /api/v1/movies/characters<id>
+```
 #### Create a new movie
 ```
 POST /api/v1/movies
@@ -124,6 +128,15 @@ GET /api/v1/franchises
 ```
 GET /api/v1/franchises/<id>
 ```
+#### Get all movies in a franchise by id
+```
+GET /api/v1/franchises/movies/<id>
+```
+#### Get all characters in a franchise by id
+```
+GET /api/v1/franchises/character/<id>
+```
+
 #### Create a new franchise
 ```
 POST /api/v1/franchises
