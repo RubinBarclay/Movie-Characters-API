@@ -27,7 +27,6 @@ namespace Movie_Characters_API.Services.MovieDataAccess
                 throw new MovieNotFoundException(id);
             }
 
-
             _context.Movies.Remove(movies);
             await _context.SaveChangesAsync();
         }
@@ -37,7 +36,7 @@ namespace Movie_Characters_API.Services.MovieDataAccess
             return await _context.Movies.Include(x => x.Characters).ToListAsync();
         }
 
-        public async Task<IEnumerable<Character>> ReadAllCharacterInMovie(int id)
+        public async Task<IEnumerable<Character>> ReadAllCharactersInMovie(int id)
         {
             var movie = await _context.Movies.Include(x => x.Characters).FirstOrDefaultAsync(x => x.Id == id);
 

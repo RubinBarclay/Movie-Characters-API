@@ -10,6 +10,7 @@ namespace Movie_Characters_API.DTOs.Profiles
     {
         public MovieProfile() 
         {
+            CreateMap<Movie, DTOGetMovieInFranchise>();
             CreateMap<DTOPostMovie, Movie>();
             CreateMap<DTOPutMovie, Movie>();
             CreateMap<Movie, DTOGetMovie>()

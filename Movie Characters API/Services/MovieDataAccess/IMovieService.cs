@@ -11,6 +11,6 @@ namespace Movie_Characters_API.Services.MovieDataAccess
         /// <param name="id"></param>
         /// <exception cref="MovieNotFoundException">Thrown if franchise is not found</exception>
         /// <returns>IEnumerable of movies</returns>
-        Task<IEnumerable<Character>> ReadAllCharacterInMovie(int id);
+        Task<IEnumerable<Character>> ReadAllCharactersInMovie(int id);
     }
 }
