@@ -37,6 +37,17 @@ namespace Movie_Characters_API.Services.MovieDataAccess
             return await _context.Movies.Include(x => x.Characters).ToListAsync();
         }
 
+        public async Task<IEnumerable<Character>> ReadAllCharacterInMovie(int id)
+        {
+            var movie = await _context.Movies.Include(x => x.Characters).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (movie is null)
+            {
+                throw new MovieNotFoundException(id);
+            }
+            return movie.Characters;
+        }
+
         public async Task<Movie> ReadById(int id)
         {
             var movie = await _context.Movies.Include(x => x.Characters).FirstOrDefaultAsync(x => x.Id == id);

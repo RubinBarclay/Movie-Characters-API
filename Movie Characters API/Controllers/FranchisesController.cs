@@ -8,7 +8,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Movie_Characters_API.DTOs.DTOsCharacter;
 using Movie_Characters_API.DTOs.DTOsFranchise;
+using Movie_Characters_API.DTOs.DTOsMovie;
 using Movie_Characters_API.Exceptions;
 using Movie_Characters_API.Models;
 using Movie_Characters_API.Services.FranchiseDataAccess;
@@ -55,6 +57,47 @@ namespace Movie_Characters_API.Controllers
             try
             {
                 return Ok(_mapper.Map<DTOGetFranchise>(await _franchisecontext.ReadById(id)));
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Get all the movies in a franchise
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("movies/{id}")]
+        public async Task<ActionResult<IEnumerable<DTOGetMovie>>> GetMoviesInFranchiseWithFranchisId(int id)
+        {
+            try
+            {
+                return Ok(_mapper.Map<IEnumerable<DTOGetMovie>>(await _franchisecontext.ReadAllMoviesInFranchise(id)));
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message
+                });
+            }
+        }
+        /// <summary>
+        /// Get all the Characters in a franchise
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("character/{id}")]
+        public async Task<ActionResult<IEnumerable<DTOGetCharacter>>> GetCharacterInFranchiseWithFranchisId(int id)
+        {
+            try
+            {
+                return Ok(_mapper.Map<IEnumerable<DTOGetCharacter>>(await _franchisecontext.ReadAllCharactersInFranchise(id)));
             }
             catch (FranchiseNotFoundException ex)
             {
@@ -123,7 +166,7 @@ namespace Movie_Characters_API.Controllers
                     Detail = ex.Message
                 });
             }
-                
+
 
             for (int i = 0; i < movieID.Length; i++)
             {
@@ -148,7 +191,7 @@ namespace Movie_Characters_API.Controllers
                 }
             }
             return BadRequest();
-         
+
         }
 
 

@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Movie_Characters_API.DTOs.DTOsCharacter;
 using Movie_Characters_API.DTOs.DTOsFranchise;
 using Movie_Characters_API.DTOs.DTOsMovie;
 using Movie_Characters_API.Exceptions;
@@ -54,6 +55,27 @@ namespace Movie_Characters_API.Controllers
             try
             {
                 return Ok(_mapper.Map<DTOGetMovie>(await _moviecontext.ReadById(id)));
+            }
+            catch (MovieNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Get all the characters in a movie
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("Characters/{id}")]
+        public async Task<ActionResult<IEnumerable<DTOGetCharacter>>> GetCharacterInMovieWithMovieId(int id)
+        {
+            try
+            {
+                return Ok(_mapper.Map<IEnumerable<DTOGetCharacter>>(await _moviecontext.ReadAllCharacterInMovie(id)));
             }
             catch (MovieNotFoundException ex)
             {
