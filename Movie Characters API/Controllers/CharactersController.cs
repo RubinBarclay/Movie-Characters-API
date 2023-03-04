@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Net.Mime;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Movie_Characters_API.DTOs.DTOsCharacter;
-using Movie_Characters_API.DTOs.DTOsFranchise;
 using Movie_Characters_API.Exceptions;
 using Movie_Characters_API.Models;
 using Movie_Characters_API.Services.CharacterDataAccess;
-using Movie_Characters_API.Services.FranchiseDataAccess;
+
 
 namespace Movie_Characters_API.Controllers
 {
@@ -101,7 +95,7 @@ namespace Movie_Characters_API.Controllers
         /// <param name="createCharacterDto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Character>> PostCharacter(DTOPostCharacter createCharacterDto)
+        public async Task<ActionResult<DTOPostCharacter>> PostCharacter(DTOPostCharacter createCharacterDto)
         {
             var character = _mapper.Map<Character>(createCharacterDto);
             await _charactercontext.Create(character);
@@ -119,6 +113,9 @@ namespace Movie_Characters_API.Controllers
         {
             try
             {
+                var characterbyId = await _charactercontext.ReadById(id);
+                characterbyId.MoviesList.Clear();
+                await _charactercontext.Update(characterbyId);
                 await _charactercontext.Delete(id);
             }
             catch (CharacterNotFoundException ex)

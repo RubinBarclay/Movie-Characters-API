@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Threading.Tasks;
+﻿using System.Net.Mime;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Movie_Characters_API.DTOs.DTOsCharacter;
-using Movie_Characters_API.DTOs.DTOsFranchise;
 using Movie_Characters_API.DTOs.DTOsMovie;
 using Movie_Characters_API.Exceptions;
 using Movie_Characters_API.Models;
@@ -75,7 +70,7 @@ namespace Movie_Characters_API.Controllers
         {
             try
             {
-                return Ok(_mapper.Map<IEnumerable<DTOGetCharacter>>(await _moviecontext.ReadAllCharacterInMovie(id)));
+                return Ok(_mapper.Map<IEnumerable<DTOGetCharacter>>(await _moviecontext.ReadAllCharactersInMovie(id)));
             }
             catch (MovieNotFoundException ex)
             {
@@ -170,7 +165,7 @@ namespace Movie_Characters_API.Controllers
         /// <param name="createMovieDto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(DTOPostMovie createMovieDto)
+        public async Task<ActionResult<DTOPostMovie>> PostMovie(DTOPostMovie createMovieDto)
         {
             var movie = _mapper.Map<Movie>(createMovieDto);
             await _moviecontext.Create(movie);
@@ -188,6 +183,9 @@ namespace Movie_Characters_API.Controllers
         {
             try
             {
+                var moviebyId = await _moviecontext.ReadById(id);
+                moviebyId.Characters.Clear();
+                await _moviecontext.Update(moviebyId);
                 await _moviecontext.Delete(id);
             }
             catch (MovieNotFoundException ex)

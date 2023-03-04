@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Net.Mime;
-using System.Threading.Tasks;
+﻿using System.Net.Mime;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Movie_Characters_API.DTOs.DTOsCharacter;
 using Movie_Characters_API.DTOs.DTOsFranchise;
 using Movie_Characters_API.DTOs.DTOsMovie;
@@ -73,11 +66,11 @@ namespace Movie_Characters_API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("movies/{id}")]
-        public async Task<ActionResult<IEnumerable<DTOGetMovie>>> GetMoviesInFranchiseWithFranchisId(int id)
+        public async Task<ActionResult<IEnumerable<DTOGetMovieInFranchise>>> GetMoviesInFranchiseWithFranchisId(int id)
         {
             try
             {
-                return Ok(_mapper.Map<IEnumerable<DTOGetMovie>>(await _franchisecontext.ReadAllMoviesInFranchise(id)));
+                return Ok(_mapper.Map<IEnumerable<DTOGetMovieInFranchise>>(await _franchisecontext.ReadAllMoviesInFranchise(id)));
             }
             catch (FranchiseNotFoundException ex)
             {
@@ -116,7 +109,6 @@ namespace Movie_Characters_API.Controllers
         /// <param name="franchise"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-
         public async Task<IActionResult> PutFranchise(int id, DTOPutFranchise franchise)
         {
             if (id != franchise.Id)
@@ -159,7 +151,7 @@ namespace Movie_Characters_API.Controllers
                 await _franchisecontext.Update(franchisebyId);
 
             }
-            catch (MovieNotFoundException ex)
+            catch (FranchiseNotFoundException ex)
             {
                 return NotFound(new ProblemDetails
                 {
@@ -178,7 +170,7 @@ namespace Movie_Characters_API.Controllers
                     await _moviecontext.Update(movie);
 
                 }
-                catch (CharacterNotFoundException ex)
+                catch (MovieNotFoundException ex)
                 {
                     return NotFound(new ProblemDetails
                     {
@@ -201,7 +193,7 @@ namespace Movie_Characters_API.Controllers
         /// <param name="createFranchiseDto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Franchise>> PostFranchise(DTOPostFranchise createFranchiseDto)
+        public async Task<ActionResult<DTOPostFranchise>> PostFranchise(DTOPostFranchise createFranchiseDto)
         {
             var franchise = _mapper.Map<Franchise>(createFranchiseDto);
             await _franchisecontext.Create(franchise);
@@ -219,6 +211,9 @@ namespace Movie_Characters_API.Controllers
         {
             try
             {
+                var franchisebyId = await _franchisecontext.ReadById(id);
+                franchisebyId.MovieList.Clear();
+                await _franchisecontext.Update(franchisebyId);
                 await _franchisecontext.Delete(id);
             }
             catch (FranchiseNotFoundException ex)
